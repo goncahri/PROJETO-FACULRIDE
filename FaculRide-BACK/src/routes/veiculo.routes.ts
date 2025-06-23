@@ -11,7 +11,7 @@ import { AuthorizeMiddleware } from "../middlewares/authorize.middleware";
 const router = express.Router();
 
 // Aplica autenticação JWT para todas as rotas abaixo
-router.use('/', AuthorizeMiddleware);
+router.use(AuthorizeMiddleware as any);
 
 // GET veiculos
 router.get("/", async (req, res) => {
