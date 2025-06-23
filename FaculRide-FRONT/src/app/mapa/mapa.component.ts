@@ -2,7 +2,7 @@ import { Component, ElementRef, ViewChild, AfterViewInit, OnInit } from '@angula
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { isBrowser } from '../utils/is-browser';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-mapa',
@@ -17,7 +17,6 @@ export class MapaComponent implements AfterViewInit, OnInit {
   map!: google.maps.Map;
   directionsRenderer!: google.maps.DirectionsRenderer;
 
-  // Dados do formulário
   tipoCarona: string = 'oferecer';
   origem: string = '';
   destino: string = '';
@@ -25,12 +24,10 @@ export class MapaComponent implements AfterViewInit, OnInit {
   saidaFatec: string = '';
   ajudaCusto: number | null = null;
 
-  // Dados das viagens
   viagens: any[] = [];
   caronasOferecidas: any[] = [];
   caronasProcuradas: any[] = [];
 
-  // Dados das avaliações
   mostrarAvaliacao: boolean = false;
   nomeUsuarioSelecionado: string = '';
   idUsuarioSelecionado: number | null = null;
@@ -41,12 +38,9 @@ export class MapaComponent implements AfterViewInit, OnInit {
   avaliacoesEnviadas: any[] = [];
   usuarios: any[] = [];
 
-  // Configuração da API
-  baseURL = isBrowser() && window.location.hostname.includes('localhost')
-    ? 'http://localhost:3000/api'
-    : '/api';
+  baseURL = environment.baseURL;
 
-  usuarioLogado = isBrowser() ? JSON.parse(localStorage.getItem('usuarioLogado') || '{}') : {};
+  usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado') || '{}');
   meuId = this.usuarioLogado.idUsuario || this.usuarioLogado.id;
 
   constructor(private http: HttpClient) {}
@@ -62,49 +56,47 @@ export class MapaComponent implements AfterViewInit, OnInit {
   }
 
   inicializarMapa(): void {
-    if (isBrowser()) {
-      const mapOptions = {
-        center: new google.maps.LatLng(-23.5015, -47.4526),
-        zoom: 12,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      };
+    const mapOptions = {
+      center: new google.maps.LatLng(-23.5015, -47.4526),
+      zoom: 12,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
 
-      this.map = new google.maps.Map(this.mapContainer.nativeElement, mapOptions);
-      this.directionsRenderer = new google.maps.DirectionsRenderer();
-      this.directionsRenderer.setMap(this.map);
-    }
+    this.map = new google.maps.Map(this.mapContainer.nativeElement, mapOptions);
+    this.directionsRenderer = new google.maps.DirectionsRenderer();
+    this.directionsRenderer.setMap(this.map);
   }
 
   carregarViagens(): void {
-  this.http.get<any[]>(`${this.baseURL}/viagem`).subscribe({
-    next: (res) => {
-      this.viagens = res;
+    this.http.get<any[]>(`${this.baseURL}/viagem`).subscribe({
+      next: (res) => {
+        this.viagens = res;
 
-      this.caronasOferecidas = this.viagens
-        .filter(v => v.idUsuario === this.meuId && v.tipoUsuario === 'Motorista')
-        .map(v => ({
-          partida: v.partida,
-          destino: v.destino,
-          entrada: v.horarioEntrada,
-          saida: v.horarioSaida,
-          ajuda: v.ajudaDeCusto
-        }));
+        this.caronasOferecidas = this.viagens
+          .filter(v => v.idUsuario === this.meuId && v.tipoUsuario === 'Motorista')
+          .map(v => ({
+            partida: v.partida,
+            destino: v.destino,
+            entrada: v.horarioEntrada,
+            saida: v.horarioSaida,
+            ajuda: v.ajudaDeCusto
+          }));
 
-      this.caronasProcuradas = this.viagens
-        .filter(v => v.idUsuario === this.meuId && v.tipoUsuario === 'Passageiro')
-        .map(v => ({
-          partida: v.partida,
-          destino: v.destino,
-          entrada: v.horarioEntrada,
-          saida: v.horarioSaida,
-          ajuda: v.ajudaDeCusto
-        }));
-    },
-    error: (err) => {
-      console.error('Erro ao carregar viagens:', err);
-    }
-  });
-}
+        this.caronasProcuradas = this.viagens
+          .filter(v => v.idUsuario === this.meuId && v.tipoUsuario === 'Passageiro')
+          .map(v => ({
+            partida: v.partida,
+            destino: v.destino,
+            entrada: v.horarioEntrada,
+            saida: v.horarioSaida,
+            ajuda: v.ajudaDeCusto
+          }));
+      },
+      error: (err) => {
+        console.error('Erro ao carregar viagens:', err);
+      }
+    });
+  }
 
   carregarUsuarios(): void {
     this.http.get<any[]>(`${this.baseURL}/usuario`).subscribe({
@@ -144,47 +136,43 @@ export class MapaComponent implements AfterViewInit, OnInit {
       }
     });
 
-    if (isBrowser()) {
-      const request: google.maps.DirectionsRequest = {
-        origin: this.origem,
-        destination: this.destino,
-        travelMode: google.maps.TravelMode.DRIVING
-      };
+    const request: google.maps.DirectionsRequest = {
+      origin: this.origem,
+      destination: this.destino,
+      travelMode: google.maps.TravelMode.DRIVING
+    };
 
-      const directionsService = new google.maps.DirectionsService();
+    const directionsService = new google.maps.DirectionsService();
 
-      directionsService.route(request, (result, status) => {
-        if (status === 'OK' && result) {
-          this.directionsRenderer.setDirections(result);
-        } else {
-          console.error('Erro ao traçar rota:', status);
-        }
-      });
-    }
+    directionsService.route(request, (result, status) => {
+      if (status === 'OK' && result) {
+        this.directionsRenderer.setDirections(result);
+      } else {
+        console.error('Erro ao traçar rota:', status);
+      }
+    });
   }
 
   mostrarRota(partida: string, destino: string): void {
-    if (isBrowser()) {
-      const request: google.maps.DirectionsRequest = {
-        origin: partida,
-        destination: destino,
-        travelMode: google.maps.TravelMode.DRIVING
-      };
+    const request: google.maps.DirectionsRequest = {
+      origin: partida,
+      destination: destino,
+      travelMode: google.maps.TravelMode.DRIVING
+    };
 
-      const directionsService = new google.maps.DirectionsService();
+    const directionsService = new google.maps.DirectionsService();
 
-      directionsService.route(request, (result, status) => {
-        if (status === 'OK' && result) {
-          this.directionsRenderer.setDirections(result);
-        } else {
-          console.error('Erro ao traçar rota:', status);
-        }
-      });
+    directionsService.route(request, (result, status) => {
+      if (status === 'OK' && result) {
+        this.directionsRenderer.setDirections(result);
+      } else {
+        console.error('Erro ao traçar rota:', status);
+      }
+    });
 
-      setTimeout(() => {
-        this.mapContainer.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 100);
-    }
+    setTimeout(() => {
+      this.mapContainer.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
   }
 
   abrirWhatsapp(nome: string, idUsuario: number, numeroWhatsapp: string) {
@@ -193,9 +181,7 @@ export class MapaComponent implements AfterViewInit, OnInit {
       return;
     }
 
-    if (isBrowser()) {
-      window.open(`https://wa.me/${numeroWhatsapp}`, '_blank');
-    }
+    window.open(`https://wa.me/${numeroWhatsapp}`, '_blank');
 
     setTimeout(() => {
       const confirmado = confirm(`A carona com ${nome} foi realizada? Deseja avaliar?`);
@@ -287,19 +273,18 @@ export class MapaComponent implements AfterViewInit, OnInit {
   }
 
   excluirCarona(idViagem: number) {
-  const confirmacao = confirm('Tem certeza que deseja excluir esta carona?');
-  if (!confirmacao) return;
+    const confirmacao = confirm('Tem certeza que deseja excluir esta carona?');
+    if (!confirmacao) return;
 
-  this.http.delete(`${this.baseURL}/viagem/${idViagem}`).subscribe({
-    next: () => {
-      alert('Carona excluída com sucesso!');
-      this.carregarViagens();
-    },
-    error: (err) => {
-      console.error('Erro ao excluir carona:', err);
-      alert('Erro ao excluir carona. Tente novamente.');
-    }
-  });
-}
-
+    this.http.delete(`${this.baseURL}/viagem/${idViagem}`).subscribe({
+      next: () => {
+        alert('Carona excluída com sucesso!');
+        this.carregarViagens();
+      },
+      error: (err) => {
+        console.error('Erro ao excluir carona:', err);
+        alert('Erro ao excluir carona. Tente novamente.');
+      }
+    });
+  }
 }

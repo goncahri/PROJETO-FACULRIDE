@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgxMaskDirective } from 'ngx-mask';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-cadastro',
@@ -24,9 +25,7 @@ export class CadastroComponent {
   anoAtual = new Date().getFullYear();
   hoje: string = new Date().toISOString().split('T')[0]; 
 
-  baseURL = window.location.hostname.includes('localhost')
-    ? 'http://localhost:3000/api/usuario'
-    : '/api/usuario';
+  baseURL = `${environment.baseURL}/usuario`;
 
   constructor(
     private fb: FormBuilder,
@@ -58,7 +57,7 @@ export class CadastroComponent {
     }, { validators: this.validarSenhas });
   }
 
-  // ✅ Validação de data de nascimento
+  // Validação de data de nascimento
   validarDataNascimento(control: AbstractControl) {
     const dataInformada = new Date(control.value);
     const hoje = new Date();

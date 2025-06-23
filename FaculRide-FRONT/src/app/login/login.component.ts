@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -20,9 +21,7 @@ export class LoginComponent {
   loginAttempts: number = 0;
   showRecoverPasswordSection: boolean = false;
 
-  baseURL = window.location.hostname.includes('localhost')
-    ? 'http://localhost:3000/api'
-    : '/api';
+  baseURL = environment.baseURL + '/usuario';
 
   constructor(private http: HttpClient) {}
 
@@ -37,7 +36,7 @@ export class LoginComponent {
       senha: this.password,
     };
 
-    this.http.post<any>(`${this.baseURL}/usuario/login`, loginData).subscribe({
+    this.http.post<any>(`${this.baseURL}/login`, loginData).subscribe({
       next: (res) => {
         const token = res.token;
         const usuario = res.usuario;

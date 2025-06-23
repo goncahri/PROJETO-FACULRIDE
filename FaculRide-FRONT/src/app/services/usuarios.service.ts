@@ -2,12 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
+// Configura a URL base dinâmica
+const baseURL = window.location.hostname.includes('localhost')
+  ? 'http://localhost:3000/api'
+  : 'https://projeto-faculride.onrender.com/api';
+
 @Injectable({
   providedIn: 'root',
 })
 export class UsuariosService {
-  private apiAuth = 'http://localhost:3000/api/auth';
-  private apiUsuario = 'http://localhost:3000/api/usuario';
+  private apiAuth = `${baseURL}/auth`;
+  private apiUsuario = `${baseURL}/usuario`;
 
   constructor(private http: HttpClient) {}
 
@@ -38,6 +43,3 @@ export class UsuariosService {
     return this.http.delete<any>(`${this.apiUsuario}/${id}`);
   }
 }
-
-
-

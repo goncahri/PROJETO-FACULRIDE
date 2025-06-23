@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { NgxMaskDirective } from 'ngx-mask';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-gerenciar-conta',
@@ -26,9 +27,7 @@ export class GerenciarComponent implements OnInit {
   temVeiculo: boolean = false;
   idVeiculo: number | null = null;
 
-  baseURL = isBrowser() && window.location.hostname.includes('localhost')
-    ? 'http://localhost:3000/api'
-    : '/api';
+  baseURL = environment.baseURL;
 
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.form = this.fb.group({
@@ -53,10 +52,9 @@ export class GerenciarComponent implements OnInit {
     });
   }
 
-    ngOnInit(): void {
+  ngOnInit(): void {
     if (isBrowser()) {
       const usuario = JSON.parse(localStorage.getItem('usuarioLogado') || '{}');
-
       const id = usuario?.id || usuario?.idUsuario;
 
       if (!id) {
@@ -65,9 +63,7 @@ export class GerenciarComponent implements OnInit {
         return;
       }
 
-      // Garante que tenha sempre o campo 'id'
       this.usuarioLogado = { ...usuario, id: id };
-
       this.temVeiculo = !!usuario.veiculo;
       this.idVeiculo = usuario.veiculo?.ID_veiculo ?? null;
 
@@ -139,9 +135,7 @@ export class GerenciarComponent implements OnInit {
     const confirmacao = confirm('Você tem certeza que deseja excluir seu veículo?');
     if (!confirmacao) return;
 
-    const baseVeiculo = `${this.baseURL}/veiculo`;
-
-    this.http.delete(`${baseVeiculo}/${this.idVeiculo}`).subscribe({
+    this.http.delete(`${this.baseURL}/veiculo/${this.idVeiculo}`).subscribe({
       next: () => {
         alert('Veículo removido com sucesso!');
         this.temVeiculo = false;
