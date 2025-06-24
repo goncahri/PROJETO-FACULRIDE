@@ -1,0 +1,3 @@
+[submodule "FaculRide-FRONT"]
+	path = FaculRide-FRONT
+	url = https://github.com/goncahri/FaculRide-FRONT.git
