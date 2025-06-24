@@ -29,10 +29,8 @@ Atendemos às metas da **ODS 11** (Cidades e Comunidades Sustentáveis) e da **O
 
 Cadastre-se, encontre ou ofereça uma carona, conecte-se e combine os detalhes e aproveite sua viagem rumo ao futuro!
 
-![Como Funciona](./documentacao/images/como-funciona.png)
+![Como Funciona](./documentação/images/como-funciona.png)
 
-[→ Voltar ao topo](#faculride--sistema-de-caronas-acadêmicas)
----
 
 ## 🧪 Tecnologias
 
@@ -45,6 +43,7 @@ Cadastre-se, encontre ou ofereça uma carona, conecte-se e combine os detalhes e
 - JWT (autenticação)
 - Render e Vercel (deploy)
 
+### [🔝 Voltar ao topo](#-faculride--sistema-de-caronas-academicas)
 ---
 
 ## 🗂️ Documentação
