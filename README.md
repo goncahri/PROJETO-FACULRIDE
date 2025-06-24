@@ -6,7 +6,7 @@
 
 Projeto de caronas acadêmicas desenvolvido pelos alunos da **FATEC Votorantim**, promovendo economia, segurança e sustentabilidade no deslocamento diário.  
 
-[Sobre](#-sobre-o-projeto) | [Backlogs & User Stories](#-backlogs--user-stories) | [Protótipo & Documentação](#-documentação) | [Equipe](#-equipe)
+[Sobre](#-sobre-o-projeto) | [Backlogs & User Stories](#-backlogs--user-stories) | | [Requisitos Funcionais & Não Funcionais](#-requisitos-funcionais) |[Protótipo & Documentação](#-documentação) | [Equipe](#-equipe)
 
 ---
 
@@ -111,6 +111,14 @@ Durante o desenvolvimento do projeto **FaculRide**, utilizamos a metodologia ág
 | RNF009                     | Portabilidade     | Deve funcionar em diversos dispositivos e sistemas operacionais          |
 | RNF010                     | Manutenibilidade  | Código organizado e documentado para facilitar atualizações futuras      |
 
+## 📌 Diagrama de Caso de Uso
+
+O diagrama abaixo ilustra os principais casos de uso do sistema **FaculRide**, evidenciando as interações dos usuários (alunos e colaboradores) com as funcionalidades disponíveis.
+
+![Diagrama de Caso de Uso](./documentacao/images/diagrama-caso-uso.png)
+
+<sub><i>Figura 2 – Diagrama de Caso de Uso.</i></sub>
+
 
 → [Voltar ao topo](#topo)
 
@@ -141,6 +149,4 @@ Durante o desenvolvimento do projeto **FaculRide**, utilizamos a metodologia ág
 > 3º Semestre – 2024/2025
 
 ---
-
-Se quiser que eu continue com a parte dos **backlogs**, **protótipo**, **sprints**, **links de deploy** etc., posso seguir com base nos outros arquivos! Deseja isso agora?
 
