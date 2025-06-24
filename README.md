@@ -1,44 +1,37 @@
-# 🧭 FaculRide | Sistema de Caronas Acadêmicas
+# 🚗 FaculRide | Sistema de Caronas Acadêmicas
 
 ![Capa](documentacao/images/capa-readme.png)
 
-Projeto de caronas acadêmicas desenvolvido pelos alunos da **FATEC Votorantim**, promovendo economia, segurança e sustentabilidade no deslocamento diário.
+Projeto de caronas acadêmicas desenvolvido pelos alunos da **FATEC Votorantim**, promovendo economia, segurança e sustentabilidade no deslocamento diário.  
 
----
-
-## 📋 Índice
-
-- [💡 Sobre o Projeto](#-sobre-o-projeto)
-- [❗ Problema](#-problema)
-- [🎯 Objetivo](#-objetivo)
-- [🧪 Tecnologias](#-tecnologias)
-- [🗂️ Documentação](#-documentação)
-- [👥 Equipe](#-equipe)
+[Sobre](#-sobre-o-projeto) | [Backlogs & User Stories](#-backlogs--user-stories) | [Protótipo & Documentação](#-documentação) | [Tecnologias](#-tecnologias) | [Equipe](#-equipe)
 
 ---
 
 ## 💡 Sobre o Projeto
 
-O **FaculRide** é uma plataforma web desenvolvida para facilitar o compartilhamento de caronas entre estudantes da FATEC Votorantim, promovendo economia, segurança e sustentabilidade no deslocamento diário.
+O **FaculRide** é uma plataforma inovadora de caronas criada especialmente para a comunidade acadêmica, com o propósito de reduzir a emissão de carbono e facilitar o deslocamento diário de estudantes, professores e funcionários.  
+Mais do que um site, o FaculRide é um projeto sustentável que reforça o compromisso ambiental da instituição.
 
----
+Com um sistema de compartilhamento de viagens, o FaculRide ajuda a diminuir o estresse do trânsito, reduzir custos e promover a integração social dentro da faculdade.  
+Pensado para a segurança e conveniência dos usuários, oferece funcionalidades como cadastro verificado e agendamento flexível de caronas, proporcionando uma experiência prática e confiável.
 
-## ❗ Problema
+O **FaculRide** é mais do que uma solução de transporte: é uma iniciativa que conecta pessoas, promove a sustentabilidade e transforma o dia a dia acadêmico.
 
-Muitos estudantes enfrentam dificuldades para chegar à FATEC, seja pela distância, falta de transporte público eficiente ou custos com deslocamento individual.  
-O FaculRide surge como uma solução colaborativa que conecta alunos motoristas e passageiros.
 
----
+## 🌱 Sustentabilidade
 
-## 🎯 Objetivo
+Nosso projeto é comprometido com o desenvolvimento sustentável.  
+Atendemos às metas da **ODS 11** (Cidades e Comunidades Sustentáveis) e da **ODS 13** (Ação Contra a Mudança Global do Clima), promovendo uma mobilidade urbana mais consciente e responsável.
 
-Criar um sistema intuitivo onde alunos possam:
 
-- Cadastrar e gerenciar caronas (oferecer ou buscar);
-- Avaliar motoristas e passageiros;
-- Visualizar rotas no mapa com apoio do Google Maps;
-- Se conectar via WhatsApp com colegas para combinar os trajetos.
+## 🚗 Como Funciona
 
+Cadastre-se, encontre ou ofereça uma carona, conecte-se e combine os detalhes e aproveite sua viagem rumo ao futuro!
+
+![Como Funciona](./documentacao/images/como-funciona.png)
+
+[→ Voltar ao topo](#faculride--sistema-de-caronas-acadêmicas)
 ---
 
 ## 🧪 Tecnologias
