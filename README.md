@@ -1,6 +1,8 @@
 # 🚗 FaculRide | Sistema de Caronas Acadêmicas
 
-![Capa](documentacao/images/capa-readme.png)
+<br id="topo">
+
+![Capa](docs/images/capa-readme.png)
 
 Projeto de caronas acadêmicas desenvolvido pelos alunos da **FATEC Votorantim**, promovendo economia, segurança e sustentabilidade no deslocamento diário.  
 
@@ -29,7 +31,7 @@ Atendemos às metas da **ODS 11** (Cidades e Comunidades Sustentáveis) e da **O
 
 Cadastre-se, encontre ou ofereça uma carona, conecte-se e combine os detalhes e aproveite sua viagem rumo ao futuro!
 
-![Como Funciona](./documentação/images/como-funciona.png)
+![Como Funciona](./docs/images/como-funciona.png)
 
 
 ## 🧪 Tecnologias
@@ -43,19 +45,31 @@ Cadastre-se, encontre ou ofereça uma carona, conecte-se e combine os detalhes e
 - JWT (autenticação)
 - Render e Vercel (deploy)
 
-### [🔝 Voltar ao topo](#-faculride--sistema-de-caronas-academicas)
+→ [Voltar ao topo](#topo)
 ---
 
 ## 🗂️ Documentação
 
-- 📄 [Projeto IHC (PDF)](documentacao/Projeto%20IHC%20-%20Grupo%20-WI%20(FaculRide).pdf)
-- 📄 [Projeto Gestão Ágil (PDF)](documentacao/Projeto%20Gestão%20Agil%20-%20Grupo%20-WI%20(FaculRide).pdf)
+- 📄 [Projeto IHC (PDF)](docs/Projeto%20IHC%20-%20Grupo%20-WI%20(FaculRide).pdf)
+- 📄 [Projeto Gestão Ágil (PDF)](docs/Projeto%20Gestão%20Agil%20-%20Grupo%20-WI%20(FaculRide).pdf)
 
 ---
 
 ## 👥 Equipe
 
-> *Herivelton Gonçalves*  
+> *Breno Jose Da Silva*  
+> Fatec Votorantim – Desenvolvimento de Software Multiplataforma  
+> 3º Semestre – 2024/2025
+
+> *Gabriel Ribeiro Correa*  
+> Fatec Votorantim – Desenvolvimento de Software Multiplataforma  
+> 3º Semestre – 2024/2025
+
+> *Herivelton Henrique Gonçalves*  
+> Fatec Votorantim – Desenvolvimento de Software Multiplataforma  
+> 3º Semestre – 2024/2025
+
+> *Wendel Augusto Lopes Vasco*  
 > Fatec Votorantim – Desenvolvimento de Software Multiplataforma  
 > 3º Semestre – 2024/2025
 
