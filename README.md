@@ -1,13 +1,32 @@
+# 🧭 FaculRide | Sistema de Caronas Acadêmicas
 
-# 🚗 FaculRide | Sistema de Caronas Acadêmicas
+![Capa](documentacao/images/capa-readme.png)
+
+Projeto de caronas acadêmicas desenvolvido pelos alunos da **FATEC Votorantim**, promovendo economia, segurança e sustentabilidade no deslocamento diário.
+
+---
+
+## 📋 Índice
+
+- [💡 Sobre o Projeto](#-sobre-o-projeto)
+- [❗ Problema](#-problema)
+- [🎯 Objetivo](#-objetivo)
+- [🧪 Tecnologias](#-tecnologias)
+- [🗂️ Documentação](#-documentação)
+- [👥 Equipe](#-equipe)
+
+---
+
+## 💡 Sobre o Projeto
 
 O **FaculRide** é uma plataforma web desenvolvida para facilitar o compartilhamento de caronas entre estudantes da FATEC Votorantim, promovendo economia, segurança e sustentabilidade no deslocamento diário.
 
 ---
 
-## 🧩 Problema
+## ❗ Problema
 
-Muitos estudantes enfrentam dificuldades para chegar à FATEC, seja pela distância, falta de transporte público eficiente ou custos com deslocamento individual. O FaculRide surge como uma solução colaborativa que conecta alunos motoristas e passageiros.
+Muitos estudantes enfrentam dificuldades para chegar à FATEC, seja pela distância, falta de transporte público eficiente ou custos com deslocamento individual.  
+O FaculRide surge como uma solução colaborativa que conecta alunos motoristas e passageiros.
 
 ---
 
@@ -22,118 +41,33 @@ Criar um sistema intuitivo onde alunos possam:
 
 ---
 
-## 🧪 Tecnologias Utilizadas
+## 🧪 Tecnologias
 
-### 🖥️ Front-end (Angular)
-- Angular 17
-- TypeScript
-- Google Maps API
-- Bootstrap
-
-### ⚙️ Back-end (Node.js + Sequelize)
+- Angular
 - Node.js
 - Express
-- Sequelize (ORM)
 - PostgreSQL (via Supabase)
-- Autenticação JWT
-- Deploy via Render
+- Sequelize ORM
+- Google Maps API
+- JWT (autenticação)
+- Render e Vercel (deploy)
 
 ---
 
-## 🔐 Funcionalidades Principais
+## 🗂️ Documentação
 
-- Cadastro e login com segurança via JWT
-- Distinção entre usuário **Motorista** e **Passageiro**
-- Cadastramento de caronas (com mapa)
-- Avaliação entre usuários com sistema de estrelas e comentários
-- Listagem e exclusão de caronas
-- Conexão via WhatsApp com usuários da plataforma
+- 📄 [Projeto IHC (PDF)](documentacao/Projeto%20IHC%20-%20Grupo%20-WI%20(FaculRide).pdf)
+- 📄 [Projeto Gestão Ágil (PDF)](documentacao/Projeto%20Gestão%20Agil%20-%20Grupo%20-WI%20(FaculRide).pdf)
 
 ---
 
-## 📱 Protótipo
+## 👥 Equipe
 
-O protótipo do sistema foi desenvolvido no Figma e validado com base nos princípios da IHC:
-
-📎 [Acessar Protótipo Interativo](https://www.figma.com/proto/...) *(link fictício – substitua pelo real caso tenha)*
-
----
-
-## 🧠 Heurísticas de Nielsen Aplicadas
-
-Durante o processo de desenvolvimento, foram analisadas as 10 heurísticas de usabilidade de Nielsen para garantir uma boa experiência de uso. Exemplos incluem:
-
-- Feedback imediato após ações do usuário (confirmações de carona, erros etc.)
-- Consistência visual e de linguagem
-- Prevenção de erros com validações de formulário
+> *Herivelton Gonçalves*  
+> Fatec Votorantim – Desenvolvimento de Software Multiplataforma  
+> 3º Semestre – 2024/2025
 
 ---
 
-## 📈 Metodologia Ágil
+Se quiser que eu continue com a parte dos **backlogs**, **protótipo**, **sprints**, **links de deploy** etc., posso seguir com base nos outros arquivos! Deseja isso agora?
 
-O projeto foi estruturado com base nos princípios do **Scrum**, incluindo:
-
-### 🏃‍♂️ Sprints
-- Sprint 1: Levantamento do problema e construção do protótipo
-- Sprint 2: Desenvolvimento do front-end com mapa e cadastro
-- Sprint 3: Integração com back-end e testes
-- Sprint 4: Ajustes finais, deploy e documentação
-
----
-
-## 👨‍💻 Equipe
-
-| Nome | RA | Função |
-|------|----|--------|
-| Anthonny Lima | XXXXXXX | Desenvolvedor |
-| Breno Vieira | XXXXXXX | Desenvolvedor |
-| Gabriel Custódio | XXXXXXX | Desenvolvedor |
-| Herivelton Henrique | XXXXXXX | Desenvolvedor |
-| Wendel Almeida | XXXXXXX | Desenvolvedor |
-| Wesley Rosa | XXXXXXX | Desenvolvedor |
-
----
-
-## 🚀 Como Executar Localmente
-
-1. Clone o repositório:
-
-```bash
-git clone https://github.com/seu-usuario/faculride-front.git
-```
-
-2. Instale as dependências:
-
-```bash
-cd faculride-front
-npm install
-```
-
-3. Execute o projeto:
-
-```bash
-ng serve
-```
-
-4. O back-end deve estar rodando em `http://localhost:3000` (ou configure via proxy).
-
----
-
-## 📦 Deploy
-
-- **Front-end:** Vercel
-- **Back-end:** Render
-- **Banco de dados:** Supabase (PostgreSQL)
-
----
-
-## 📄 Licença
-
-Este projeto é de uso acadêmico e está sob a Licença MIT.
-
----
-
-## 📌 Observações
-
-- A comunicação entre front e back utiliza um interceptor JWT.
-- O projeto é responsivo e pensado para dispositivos móveis.
