@@ -1,12 +1,12 @@
-# 🚗 FaculRide | Sistema de Caronas Acadêmicas
-
 <br id="topo">
 
 ![Capa](docs/images/capa-readme.png)
 
+# 🚗 FaculRide | Sistema de Caronas Acadêmicas
+
 Projeto de caronas acadêmicas desenvolvido pelos alunos da **FATEC Votorantim**, promovendo economia, segurança e sustentabilidade no deslocamento diário.  
 
-[Sobre](#-sobre-o-projeto) | [Backlogs & User Stories](#-backlogs--user-stories) | [Protótipo & Documentação](#-documentação) | [Tecnologias](#-tecnologias) | [Equipe](#-equipe)
+[Sobre](#-sobre-o-projeto) | [Backlogs & User Stories](#-backlogs--user-stories) | [Protótipo & Documentação](#-documentação) | [Equipe](#-equipe)
 
 ---
 
@@ -34,19 +34,104 @@ Cadastre-se, encontre ou ofereça uma carona, conecte-se e combine os detalhes e
 ![Como Funciona](./docs/images/como-funciona.png)
 
 
-## 🧪 Tecnologias
+## 🧪 Tecnologias Utilizadas
 
-- Angular
-- Node.js
-- Express
-- PostgreSQL (via Supabase)
-- Sequelize ORM
-- Google Maps API
-- JWT (autenticação)
-- Render e Vercel (deploy)
+🟣 FIGMA      🔵 TYPESCRIPT   🟠 HTML5     🔷 CSS3       🔵 ANGULAR
+🟢 NODE.JS    ☕ JAVASCRIPT   🟢 POSTGREE  🐍 PYTHON     💻 VS CODE
+🎮 DISCORD    🐙 GITHUB       💻 RENDER    💻 VERCEL     🟠 GOOGLE API
+
+![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![HTML5](https://img.shields.io/badge/HTML5-e34c26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-264de4?style=for-the-badge&logo=css3&logoColor=white)
+![React](https://img.shields.io/badge/React-61dafb?style=for-the-badge&logo=react&logoColor=black)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
+![Java](https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![VS Code](https://img.shields.io/badge/VS%20Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white)
+![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
+![Google Sheets](https://img.shields.io/badge/Google%20Sheets-34A853?style=for-the-badge&logo=googlesheets&logoColor=white)
+![Google Docs](https://img.shields.io/badge/Google%20Docs-4285F4?style=for-the-badge&logo=google-docs&logoColor=white)
 
 → [Voltar ao topo](#topo)
+
 ---
+
+## 📌 Backlogs & User Stories
+
+Durante o desenvolvimento do projeto **FaculRide**, utilizamos a metodologia ágil **Scrum**, com o objetivo de garantir entregas iterativas, incrementais e com valor contínuo ao usuário final. O projeto foi dividido em **5 Sprints**, cada uma com seus respectivos objetivos e entregáveis.
+
+
+### 🔁 Metodologia Scrum Aplicada
+
+> O Scrum foi escolhido por sua abordagem flexível e adaptável, permitindo respostas rápidas a mudanças e feedbacks contínuos ao longo do ciclo de desenvolvimento.
+
+
+### 📅 Sprints do Projeto
+
+| Sprint | Período         | Principais Entregas                                                                 |
+|--------|------------------|-------------------------------------------------------------------------------------|
+| 01     | Início do projeto | Estruturação do sistema, cadastro e autenticação de usuários, acessibilidade inicial |
+| 02     | Iteração Visual   | Melhorias visuais e funcionais, integração com Google Maps, refinamento da interface |
+| 03     | Integração Total  | Integração dos fluxos Angular, back-end e banco (PostgreSQL), testes de integração   |
+| 04     | Qualidade Final   | Testes de acessibilidade e usabilidade, ajustes de desempenho                       |
+| 05     | Entrega Final     | Documentação técnica, manuais, deploy final no Render                               |
+
+
+### 🧾 User Stories
+
+![User-Stories](./docs/images/user-stories.png)
+
+
+## ✅ Requisitos Funcionais
+
+| Nº Requisito Funcional | Nome              | Descrição                                                             |
+|------------------------|-------------------|-----------------------------------------------------------------------|
+| RF001                  | Login             | Fazer Login Intranet                                                  |
+| RF002                  | Gerenciar Usuário | Consultar, cadastrar, alterar ou excluir usuário do site              |
+| RF003                  | Chamar Carona     | Solicitar, passageiro solicita a sua carona ao motorista              |
+| RF004                  | Oferecer Carona   | Oferecer carona, motorista disponibiliza a sua carona ao passageiro   |
+| RF005                  | Procurar Carona   | Pesquisar e visualizar lista de motoristas disponíveis                |
+| RF006                  | Geolocalização    | Rastrear localização dos passageiros e motoristas                     |
+| RF007                  | Notificações      | Enviar notificações via e-mail ou pelo site para informar os usuários |
+| RF008                  | Avaliação         | Implementar um sistema de avaliação de 1 a 5 para os usuários         |
+| RF009                  | Comentários       | Comentários relacionados aos usuários                                 |
+
+
+## 🚫 Requisitos Não Funcionais
+
+| Nº Requisito Não Funcional | Nome              | Descrição                                                                 |
+|----------------------------|-------------------|---------------------------------------------------------------------------|
+| RNF001                     | Banco de dados    | Utilização de Banco de dados SQL Server                                   |
+| RNF002                     | HTML              | Utilizar linguagem HTML                                                   |
+| RNF003                     | Segurança         | O sistema deve ser protegido contra acessos não autorizados              |
+| RNF004                     | Escalabilidade    | O sistema deve ser capaz de aumentar ou diminuir sua capacidade          |
+| RNF005                     | Velocidade e Eficiência | O sistema deve ser capaz de escalar o tráfego conforme necessário        |
+| RNF006                     | Disponibilidade   | O sistema deve estar disponível 24h por dia, 7 dias por semana           |
+| RNF007                     | Usabilidade       | Interface intuitiva e fácil de usar, mesmo para iniciantes               |
+| RNF008                     | Confiabilidade    | O sistema deve ser robusto e resistente a falhas                         |
+| RNF009                     | Portabilidade     | Deve funcionar em diversos dispositivos e sistemas operacionais          |
+| RNF010                     | Manutenibilidade  | Código organizado e documentado para facilitar atualizações futuras      |
+
+
+→ [Voltar ao topo](#topo)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## 🗂️ Documentação
 
