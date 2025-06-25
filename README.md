@@ -6,7 +6,7 @@
 
 Projeto de caronas acadêmicas desenvolvido pelos alunos da **FATEC Votorantim**, promovendo economia, segurança e sustentabilidade no deslocamento diário.  
 
-[Sobre](#-sobre-o-projeto) | [Backlogs & User Stories](#-backlogs--user-stories) | | [Requisitos Funcionais & Não Funcionais](#-requisitos-funcionais) |[Protótipo & Documentação](#-documentação) | [Equipe](#-equipe)
+[Sobre](#-sobre-o-projeto) | [Backlogs & User Stories](#-backlogs--user-stories) | [Requisitos Funcionais & Não Funcionais](#-requisitos-funcionais) | [Diagrama de Caso de Uso](#-diagrama-de-caso-de-uso) | [Documentação](#-documentação) | [Deploy & Infraestrutura](#-deploy--Infraestrutura) | [Equipe](#-equipe)
 
 ---
 
@@ -79,6 +79,7 @@ Durante o desenvolvimento do projeto **FaculRide**, utilizamos a metodologia ág
 ### 🧾 User Stories
 
 ![User-Stories](./docs/images/user-stories.png)
+<sub><i>Figura 1 – User Stories.</i></sub>
 
 
 ## ✅ Requisitos Funcionais
@@ -115,18 +116,103 @@ Durante o desenvolvimento do projeto **FaculRide**, utilizamos a metodologia ág
 
 O diagrama abaixo ilustra os principais casos de uso do sistema **FaculRide**, evidenciando as interações dos usuários (alunos e colaboradores) com as funcionalidades disponíveis.
 
-![Diagrama de Caso de Uso](./documentacao/images/diagrama-caso-uso.png)
+![Diagrama de Caso de Uso](./docs/images/diagrama-caso-uso.png)
 
 <sub><i>Figura 2 – Diagrama de Caso de Uso.</i></sub>
 
 
 → [Voltar ao topo](#topo)
 
+---
 
-## 🗂️ Documentação
+## 📄 Documentação
 
-- 📄 [Projeto IHC (PDF)](docs/Projeto%20IHC%20-%20Grupo%20-WI%20(FaculRide).pdf)
-- 📄 [Projeto Gestão Ágil (PDF)](docs/Projeto%20Gestão%20Agil%20-%20Grupo%20-WI%20(FaculRide).pdf)
+Toda a documentação do projeto está disponível na pasta [`docs](./docs/), incluindo os arquivos:
+
+- 📘 [`Projeto IHC - FaculRide`](./docs/Projeto%20IHC%20-%20Grupo%20-WI%20(FaculRide).pdf)
+- 📙 [`Projeto Gestão Ágil - FaculRide`](./docs/Projeto%20Gestao%20Agil%20-%20Grupo%20-WI%20(FaculRide).pdf)
+
+Esses documentos apresentam detalhadamente os objetivos, requisitos, sprints, metodologias utilizadas e análises realizadas durante o desenvolvimento.
+
+
+## 🧩 Protótipo (Figma)
+
+O protótipo de interface do sistema foi desenvolvido no **Figma** e está disponível para visualização no link abaixo:
+
+👉 [Acessar Protótipo no Figma](https://www.figma.com/proto/lZtEPZcnFiRQ74FWPF2CKd/FaculRide?node-id=1-2&p=f&t=5LuytFEyusGnC6hb-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=1%3A2)
+
+→ [Voltar ao topo](#topo)
+
+---
+
+## 🚀 Deploy & Infraestrutura
+
+O projeto foi implementado com separação entre **front-end**, **back-end** e **banco de dados** utilizando as plataformas **Vercel**, **Render** e **Supabase (PostgreSQL)**.
+
+### 📦 Back-end (Render)
+
+- Plataforma: [Render](https://render.com/)
+- Tecnologias: Node.js, TypeScript, Express, Sequelize ORM
+- Banco de Dados: PostgreSQL (hospedado no [Supabase](https://supabase.com/))
+- Autenticação via JWT
+- Endpoints RESTful protegidos por middleware `authorize`
+- Deploy automático via GitHub
+
+🔗 Link da API: `https://faculride-api.onrender.com`
+
+### 📘 Documentação da API com Swagger
+
+A documentação dos endpoints da API foi gerada automaticamente com o **Swagger**, facilitando a visualização e testes da interface RESTful.
+
+- Ferramenta utilizada: [`swagger-jsdoc`](https://www.npmjs.com/package/swagger-jsdoc) + [`swagger-ui-express`](https://www.npmjs.com/package/swagger-ui-express)
+- Disponível publicamente junto à API
+
+🔗 Acesse a documentação Swagger:  
+[`https://faculride-api.onrender.com/api-docs`](https://faculride-api.onrender.com/api-docs)
+
+---
+
+### 📑 Recursos disponíveis na documentação Swagger
+
+- Autenticação e geração de token via login
+- Cadastro de usuário e veículo
+- Listagem de caronas disponíveis
+- Filtros por origem, destino, horário e data
+- Avaliação de motoristas
+- Exclusão e atualização de dados
+- Headers necessários, como `Authorization: Bearer <token>`
+
+### 🌐 Front-end (Vercel)
+
+- Plataforma: [Vercel](https://vercel.com/)
+- Framework: Angular
+- Responsivo, com design moderno e tema escuro
+- Integração total com a API (login, cadastro, busca de caronas, avaliação, etc.)
+
+🔗 Link da aplicação: [https://faculride.vercel.app](https://faculride.vercel.app)
+
+## 🛠️ Variáveis de Ambiente
+
+O projeto utiliza variáveis para conexão com o banco e validação JWT. Exemplo de `.env` para o back-end:
+
+```env
+PORT=3000
+DB_HOST=db.supabase.co
+DB_USER=postgres
+DB_PASSWORD=****
+DB_NAME=faculride
+DB_PORT=5432
+JWT_SECRET=chave-secreta
+```
+
+📎 Observações Finais
+O deploy é contínuo, integrado ao GitHub.
+
+A estrutura foi organizada em pastas padronizadas para facilitar o desenvolvimento colaborativo.
+
+Testes e validações foram realizados com usuários reais da comunidade acadêmica para validar a proposta.
+
+→ [Voltar ao topo](#topo)
 
 ---
 
