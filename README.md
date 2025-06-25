@@ -75,11 +75,13 @@ Durante o desenvolvimento do projeto **FaculRide**, utilizamos a metodologia ág
 | 04     | Qualidade Final   | Testes de acessibilidade e usabilidade, ajustes de desempenho                       |
 | 05     | Entrega Final     | Documentação técnica, manuais, deploy final no Render                               |
 
+→ [Voltar ao topo](#topo)
 
 ### 🧾 User Stories
 
 ![User-Stories](./docs/images/user-stories.png)
 
+→ [Voltar ao topo](#topo)
 
 ## ✅ Requisitos Funcionais
 
@@ -110,6 +112,8 @@ Durante o desenvolvimento do projeto **FaculRide**, utilizamos a metodologia ág
 | RNF008                     | Confiabilidade    | O sistema deve ser robusto e resistente a falhas                         |
 | RNF009                     | Portabilidade     | Deve funcionar em diversos dispositivos e sistemas operacionais          |
 | RNF010                     | Manutenibilidade  | Código organizado e documentado para facilitar atualizações futuras      |
+
+→ [Voltar ao topo](#topo)
 
 ## 📌 Diagrama de Caso de Uso
 
@@ -178,6 +182,8 @@ https://projeto-faculride.onrender.com/api-docs/
 - Avaliação de motoristas
 - Exclusão e atualização de dados
 - Headers necessários, como `Authorization: Bearer <token>`
+
+→ [Voltar ao topo](#topo)
 
 ### 🌐 Front-end (Vercel)
 
