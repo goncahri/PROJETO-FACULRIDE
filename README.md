@@ -6,7 +6,7 @@
 
 Projeto de caronas acadêmicas desenvolvido pelos alunos da **FATEC Votorantim**, promovendo economia, segurança e sustentabilidade no deslocamento diário.  
 
-[Sobre](#-sobre-o-projeto) | [Backlogs & User Stories](#-backlogs--user-stories) | [Requisitos Funcionais & Não Funcionais](#-requisitos-funcionais) | [Diagrama de Caso de Uso](#-diagrama-de-caso-de-uso) | [Documentação](#-documentação) | [Deploy & Infraestrutura](#-deploy--Infraestrutura) | [Equipe](#-equipe)
+[Sobre](#-sobre-o-projeto) | [Backlogs](#-backlogs) | [Sprint](#-sprints) | [User Stories](#-user-stories) | [Requisitos](#-requisitos-funcionais) | [Diagrama de Caso de Uso](#-diagrama-de-caso-de-uso) | [Documentação](#-documentação) | [Figma](#-protótipo-figma) | [Back-End](#-back-end-render) | [Swagger](#-documentação-swagger) | [Front-End](#-front-end-vercel) | [Equipe](#-equipe)
 
 ---
 
@@ -55,7 +55,7 @@ Cadastre-se, encontre ou ofereça uma carona, conecte-se e combine os detalhes e
 
 ---
 
-## 📌 Backlogs & User Stories
+## 📌 Backlogs
 
 Durante o desenvolvimento do projeto **FaculRide**, utilizamos a metodologia ágil **Scrum**, com o objetivo de garantir entregas iterativas, incrementais e com valor contínuo ao usuário final. O projeto foi dividido em **5 Sprints**, cada uma com seus respectivos objetivos e entregáveis.
 
@@ -65,7 +65,7 @@ Durante o desenvolvimento do projeto **FaculRide**, utilizamos a metodologia ág
 > O Scrum foi escolhido por sua abordagem flexível e adaptável, permitindo respostas rápidas a mudanças e feedbacks contínuos ao longo do ciclo de desenvolvimento.
 
 
-### 📅 Sprints do Projeto
+### 📅 Sprints
 
 | Sprint | Período         | Principais Entregas                                                                 |
 |--------|------------------|-------------------------------------------------------------------------------------|
@@ -157,7 +157,7 @@ O projeto foi implementado com separação entre **front-end**, **back-end** e *
 
 🔗 Link da API: https://projeto-faculride.onrender.com
 
-### 📘 Documentação da API com Swagger
+### 📘 Documentação Swagger
 
 A documentação dos endpoints da API foi gerada automaticamente com o **Swagger**, facilitando a visualização e testes da interface RESTful.
 
