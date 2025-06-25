@@ -79,7 +79,6 @@ Durante o desenvolvimento do projeto **FaculRide**, utilizamos a metodologia ág
 ### 🧾 User Stories
 
 ![User-Stories](./docs/images/user-stories.png)
-<sub><i>Figura 1 – User Stories.</i></sub>
 
 
 ## ✅ Requisitos Funcionais
@@ -116,9 +115,7 @@ Durante o desenvolvimento do projeto **FaculRide**, utilizamos a metodologia ág
 
 O diagrama abaixo ilustra os principais casos de uso do sistema **FaculRide**, evidenciando as interações dos usuários (alunos e colaboradores) com as funcionalidades disponíveis.
 
-![Diagrama de Caso de Uso](./docs/images/diagrama-caso-uso.png)
-
-<sub><i>Figura 2 – Diagrama de Caso de Uso.</i></sub>
+![Diagrama de Caso de Uso](./docs/images/diagrama-caso-uso.jpg)
 
 
 → [Voltar ao topo](#topo)
@@ -127,7 +124,7 @@ O diagrama abaixo ilustra os principais casos de uso do sistema **FaculRide**, e
 
 ## 📄 Documentação
 
-Toda a documentação do projeto está disponível na pasta [`docs](./docs/), incluindo os arquivos:
+Toda a documentação do projeto está disponível na pasta [docs](./docs/), incluindo os arquivos:
 
 - 📘 [`Projeto IHC - FaculRide`](./docs/Projeto%20IHC%20-%20Grupo%20-WI%20(FaculRide).pdf)
 - 📙 [`Projeto Gestão Ágil - FaculRide`](./docs/Projeto%20Gestao%20Agil%20-%20Grupo%20-WI%20(FaculRide).pdf)
@@ -158,7 +155,7 @@ O projeto foi implementado com separação entre **front-end**, **back-end** e *
 - Endpoints RESTful protegidos por middleware `authorize`
 - Deploy automático via GitHub
 
-🔗 Link da API: `https://faculride-api.onrender.com`
+🔗 Link da API: https://projeto-faculride.onrender.com
 
 ### 📘 Documentação da API com Swagger
 
@@ -168,7 +165,7 @@ A documentação dos endpoints da API foi gerada automaticamente com o **Swagger
 - Disponível publicamente junto à API
 
 🔗 Acesse a documentação Swagger:  
-[`https://faculride-api.onrender.com/api-docs`](https://faculride-api.onrender.com/api-docs)
+https://projeto-faculride.onrender.com/api-docs/
 
 ---
 
@@ -189,7 +186,7 @@ A documentação dos endpoints da API foi gerada automaticamente com o **Swagger
 - Responsivo, com design moderno e tema escuro
 - Integração total com a API (login, cadastro, busca de caronas, avaliação, etc.)
 
-🔗 Link da aplicação: [https://faculride.vercel.app](https://faculride.vercel.app)
+🔗 Link da aplicação: https://faculride.vercel.app
 
 ## 🛠️ Variáveis de Ambiente
 
