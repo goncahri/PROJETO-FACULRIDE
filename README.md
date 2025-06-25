@@ -168,8 +168,7 @@ A documentação dos endpoints da API foi gerada automaticamente com o **Swagger
 - Ferramenta utilizada: [`swagger-jsdoc`](https://www.npmjs.com/package/swagger-jsdoc) + [`swagger-ui-express`](https://www.npmjs.com/package/swagger-ui-express)
 - Disponível publicamente junto à API
 
-🔗 Acesse a documentação Swagger:  
-https://projeto-faculride.onrender.com/api-docs/
+🔗 Acesse a documentação Swagger: https://projeto-faculride.onrender.com/api-docs/ 
 
 ---
 
