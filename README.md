@@ -31,8 +31,10 @@ Atendemos às metas da **ODS 11** (Cidades e Comunidades Sustentáveis) e da **O
 
 Cadastre-se, encontre ou ofereça uma carona, conecte-se e combine os detalhes e aproveite sua viagem rumo ao futuro!
 
-![Como Funciona](./docs/images/como-funciona.png)
+![Como Funciona!](./docs/images/como-funciona.png)
 
+
+![Veja nosso vídeo!](./docs/Video%20Pitch%20-%20Projeto%20FaculRide.mp4)
 
 ## 🧪 Tecnologias Utilizadas
 
