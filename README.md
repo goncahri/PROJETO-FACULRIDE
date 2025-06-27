@@ -34,7 +34,7 @@ Cadastre-se, encontre ou ofereça uma carona, conecte-se e combine os detalhes e
 ![Como Funciona!](./docs/images/como-funciona.png)
 
 
-![Veja nosso vídeo!](./docs/Video%20Pitch%20-%20Projeto%20FaculRide.mp4)
+[Veja nosso vídeo!](./docs/Video%20Pitch%20-%20Projeto%20FaculRide.mp4)
 
 ## 🧪 Tecnologias Utilizadas
 
