@@ -16,6 +16,8 @@ export interface Iusuario {
   senha: string;
   tipoUsuario: "passageiro" | "motorista";
   cnh?: string; // somente para motoristas
+  fotoUrl?: string | null;
+  fotoPath?: string | null;
 }
 
 export interface IusuarioFiltros {

@@ -2,7 +2,7 @@ import { Iusuario } from "../interfaces/Iusuario";
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/database";
 
-type UsuarioCreationalAttributes = Optional<Iusuario, "idUsuario" | "cnh">;
+type UsuarioCreationalAttributes = Optional<Iusuario, "idUsuario" | "cnh" | "fotoUrl" | "fotoPath">;
 
 export class UsuarioModel extends Model<Iusuario, UsuarioCreationalAttributes> {
   public idUsuario!: number;
@@ -22,6 +22,8 @@ export class UsuarioModel extends Model<Iusuario, UsuarioCreationalAttributes> {
   public tipoUsuario!: "passageiro" | "motorista";
   public cnh?: string;
   public fatec!: string;
+  public fotoUrl?: string | null;
+  public fotoPath?: string | null;
 }
 
 UsuarioModel.init({
@@ -94,6 +96,16 @@ UsuarioModel.init({
   fatec: {
     type: DataTypes.STRING(50),
     allowNull: false
+  },
+fotoUrl: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+    comment: "URL pública da foto do usuário"
+  },
+  fotoPath: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+    comment: "Path do arquivo no Supabase Storage"
   }
 }, {
   sequelize,

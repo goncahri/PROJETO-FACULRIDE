@@ -9,6 +9,7 @@ import { VeiculoModel } from "../models/veiculo.model";
 import { LogAcessoModel } from "../models/logAcesso.model";
 import { Iusuario, IRetornoCadastroUsuario, IusuarioFiltros } from "../interfaces/Iusuario";
 import { IVeiculo } from "../interfaces/Iveiculo";
+import { supabaseAdmin } from "../config/supabase";
 
 // Validação de senha forte
 function validarSenha(senha: string) {
@@ -121,28 +122,32 @@ export const loginUsuario = async (req: Request, res: Response) => {
       tipoUsuario: usuario.tipoUsuario,
     });
 
-  return res.status(200).json({
-    mensagem: "Login realizado com sucesso",
-    token,
-    usuario: {
-      id: usuario.idUsuario,
-      nome: usuario.nome,
-      cpf: usuario.cpf,
-      email: usuario.email,
-      telefone: usuario.telefone,
-      cep: usuario.cep,
-      endereco: usuario.endereco,
-      numero: usuario.numero,
-      cidade: usuario.cidade,
-      estado: usuario.estado,
-      fatec: usuario.fatec,
-      ra: usuario.ra,
-      genero: usuario.genero,
-      dataNascimento: usuario.dataNascimento,
-      tipoUsuario: usuario.tipoUsuario,
-      veiculo: veiculo ? veiculo.toJSON() : null
-    }
-  });
+    return res.status(200).json({
+      mensagem: "Login realizado com sucesso",
+      token,
+      usuario: {
+        id: usuario.idUsuario,
+        nome: usuario.nome,
+        cpf: usuario.cpf,
+        email: usuario.email,
+        telefone: usuario.telefone,
+        cep: usuario.cep,
+        endereco: usuario.endereco,
+        numero: usuario.numero,
+        cidade: usuario.cidade,
+        estado: usuario.estado,
+        fatec: usuario.fatec,
+        ra: usuario.ra,
+        genero: usuario.genero,
+        dataNascimento: usuario.dataNascimento,
+        tipoUsuario: usuario.tipoUsuario,
+        // NOVOS CAMPOS
+        fotoUrl: usuario.fotoUrl ?? null,
+        fotoPath: usuario.fotoPath ?? null,
+        // -----
+        veiculo: veiculo ? veiculo.toJSON() : null
+      }
+    });
   } catch (error: any) {
     return res.status(500).json({
       erro: error.message || "Erro interno ao fazer login",
@@ -181,6 +186,10 @@ export const buscarUsuarioPorId = async (req: Request, res: Response) => {
       genero: usuario.genero,
       dataNascimento: usuario.dataNascimento,
       tipoUsuario: usuario.tipoUsuario,
+      // NOVOS CAMPOS
+      fotoUrl: usuario.fotoUrl ?? null,
+      fotoPath: usuario.fotoPath ?? null,
+      // -----
       veiculo: veiculo ? veiculo.toJSON() : null,
     });
   } catch (error: any) {
@@ -231,5 +240,95 @@ export const deletarUsuario = async (req: Request, res: Response) => {
     return res.status(500).json({
       erro: error.message || "Erro ao deletar usuário",
     });
+  }
+};
+
+// ------- NOVO HANDLER (apenas fotoUrl/fotoPath) -------
+export const atualizarFotoUsuario = async (req: Request, res: Response) => {
+  try {
+    const { fotoUrl, fotoPath } = req.body || {};
+
+    if (!fotoUrl && !fotoPath) {
+      return res.status(400).json({ erro: "Envie pelo menos fotoUrl ou fotoPath" });
+    }
+
+    // Obtém o usuário autenticado do middleware (id ou idUsuario)
+    const userCtx = (req as any).user;
+    const idUsuarioAutenticado: number | undefined = userCtx?.id ?? userCtx?.idUsuario;
+
+    if (!idUsuarioAutenticado) {
+      return res.status(401).json({ erro: "Usuário não autenticado" });
+    }
+
+    const usuario = await UsuarioModel.findByPk(idUsuarioAutenticado);
+    if (!usuario) {
+      return res.status(404).json({ erro: "Usuário não encontrado" });
+    }
+
+    // Atualiza SOMENTE os campos novos
+    await usuario.update({
+      ...(typeof fotoUrl !== "undefined" ? { fotoUrl } : {}),
+      ...(typeof fotoPath !== "undefined" ? { fotoPath } : {}),
+    });
+
+    return res.status(200).json({ mensagem: "Foto atualizada com sucesso" });
+  } catch (error: any) {
+    console.error("Erro ao atualizar foto do usuário:", error);
+    return res.status(500).json({ erro: error.message || "Erro ao atualizar foto" });
+  }
+};
+
+// ------- NOVO HANDLER: upload de foto (multipart 'file') -------
+export const uploadFotoUsuario = async (req: Request, res: Response) => {
+  try {
+    const userCtx = (req as any).user;
+    const idUsuario: number | undefined = userCtx?.id ?? userCtx?.idUsuario;
+    if (!idUsuario) {
+      return res.status(401).json({ erro: "Usuário não autenticado" });
+    }
+
+    const file = (req as any).file as { buffer: Buffer; mimetype: string; size: number; originalname: string } | undefined;
+    if (!file) {
+      return res.status(400).json({ erro: "Envie um arquivo em 'file' (multipart/form-data)" });
+    }
+
+    const mime = file.mimetype;
+    const allow = ["image/jpeg", "image/png", "image/webp"];
+    if (!allow.includes(mime)) {
+      return res.status(400).json({ erro: "Tipo inválido. Use JPEG, PNG ou WEBP." });
+    }
+    if (file.size > 2 * 1024 * 1024) { // 2MB
+      return res.status(400).json({ erro: "Arquivo muito grande (máx. 2MB)." });
+    }
+
+    const ext = mime === "image/png" ? "png" : mime === "image/webp" ? "webp" : "jpg";
+    const bucket = process.env.SUPABASE_BUCKET || "faculride";
+    const filePath = `${idUsuario}/profile.${ext}`;
+
+    const { error: upErr } = await supabaseAdmin
+      .storage.from(bucket)
+      .upload(filePath, file.buffer, { contentType: mime, upsert: true });
+
+    if (upErr) {
+      console.error("Erro no upload Supabase:", upErr);
+      return res.status(500).json({ erro: "Falha ao enviar arquivo ao Storage" });
+    }
+
+    const { data: pub } = supabaseAdmin.storage.from(bucket).getPublicUrl(filePath);
+    const fotoUrl = pub?.publicUrl ?? null;
+
+    const usuario = await UsuarioModel.findByPk(idUsuario);
+    if (!usuario) return res.status(404).json({ erro: "Usuário não encontrado" });
+
+    await usuario.update({ fotoUrl, fotoPath: filePath });
+
+    return res.status(200).json({
+      mensagem: "Foto enviada e usuário atualizado com sucesso",
+      fotoUrl,
+      fotoPath: filePath
+    });
+  } catch (error: any) {
+    console.error("uploadFotoUsuario:", error);
+    return res.status(500).json({ erro: error.message || "Erro ao enviar foto" });
   }
 };

@@ -5,10 +5,20 @@ import {
   loginUsuario,
   buscarUsuarioPorId,
   atualizarUsuario,
-  deletarUsuario
+  deletarUsuario,
+  atualizarFotoUsuario,
+  // >>> NOVO IMPORT
+  uploadFotoUsuario
 } from "../controllers/usuario.controller";
 import { Iusuario, IusuarioFiltros } from "../interfaces/Iusuario";
 import { AuthorizeMiddleware } from "../middlewares/authorize.middleware";
+
+// >>> NOVO: multer para receber o arquivo (em memória) no upload
+import multer from "multer";
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 2 * 1024 * 1024 } // 2MB
+});
 
 const router = express.Router();
 
@@ -56,6 +66,17 @@ router.put("/:id", (req, res) => {
 // DELETE usuário 
 router.delete("/:id", (req, res) => {
   deletarUsuario(req, res);
+});
+
+// >>> ROTA PROTEGIDA — atualiza SOMENTE fotoUrl/fotoPath do usuário autenticado (JSON)
+router.patch("/foto", (req, res) => {
+  atualizarFotoUsuario(req, res);
+});
+
+// >>> NOVA ROTA PROTEGIDA — upload multipart da foto + atualização automática no usuário
+// Body: multipart/form-data com campo "file"
+router.post("/foto/upload", upload.single("file"), (req, res) => {
+  uploadFotoUsuario(req, res);
 });
 
 export default router;
