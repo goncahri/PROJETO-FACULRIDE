@@ -9,23 +9,40 @@ export const AuthorizeMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
-  const { authorization } = req.headers;
-  const secret = process.env.JWT_SECRET || "";
+  try {
+    const headerAuth =
+      (req.headers["authorization"] as string) ||
+      (req.headers["x-access-token"] as string);
 
-  if (!authorization) {
-    return res.status(401).json({ message: "Token não fornecido." });
-  }
-
-  const token = authorization.replace("Bearer ", "").trim();
-
-  jwt.verify(token, secret, (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ message: "Token inválido ou expirado." });
+    if (!headerAuth) {
+      return res.status(401).json({ erro: "Token não fornecido." });
     }
 
-    (req as any).usuario = decoded;
-    console.log("✔️ Token validado:", decoded);
-    next();
-  });
-};
+    // Suporta "Bearer xxx" ou apenas "xxx"
+    const token = headerAuth.startsWith("Bearer ")
+      ? headerAuth.slice(7).trim()
+      : headerAuth.trim();
 
+    const secret = process.env.JWT_SECRET || "secretoo123";
+
+    jwt.verify(token, secret, (err, decoded: any) => {
+      if (err || !decoded) {
+        return res.status(401).json({ erro: "Token inválido ou expirado." });
+      }
+
+      // Compatibilidade: grava nos dois campos
+      (req as any).usuario = decoded;
+      (req as any).user = {
+        id: decoded.id ?? decoded.idUsuario,
+        idUsuario: decoded.id ?? decoded.idUsuario,
+        nome: decoded.nome,
+        tipoUsuario: decoded.tipoUsuario,
+      };
+
+      // console.log("✔️ Token validado:", decoded);
+      return next();
+    });
+  } catch (e) {
+    return res.status(401).json({ erro: "Falha na autenticação." });
+  }
+};
