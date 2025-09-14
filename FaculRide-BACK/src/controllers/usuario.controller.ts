@@ -297,8 +297,8 @@ export const uploadFotoUsuario = async (req: Request, res: Response) => {
     if (!allow.includes(mime)) {
       return res.status(400).json({ erro: "Tipo inválido. Use JPEG, PNG ou WEBP." });
     }
-    if (file.size > 2 * 1024 * 1024) { // 2MB
-      return res.status(400).json({ erro: "Arquivo muito grande (máx. 2MB)." });
+    if (file.size > 5 * 1024 * 1024) { // 5MB
+      return res.status(400).json({ erro: "Arquivo muito grande (máx. 5MB)." });
     }
 
     const ext = mime === "image/png" ? "png" : mime === "image/webp" ? "webp" : "jpg";
