@@ -10,6 +10,11 @@ export const AuthorizeMiddleware = (
   next: NextFunction
 ) => {
   try {
+    // ✅ Libera imediatamente preflight requests (OPTIONS)
+    if (req.method === "OPTIONS") {
+      return res.sendStatus(204); // Sem conteúdo, apenas confirma que a rota existe
+    }
+
     const headerAuth =
       (req.headers["authorization"] as string) ||
       (req.headers["x-access-token"] as string);
@@ -39,7 +44,6 @@ export const AuthorizeMiddleware = (
         tipoUsuario: decoded.tipoUsuario,
       };
 
-      // console.log("✔️ Token validado:", decoded);
       return next();
     });
   } catch (e) {

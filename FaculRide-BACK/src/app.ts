@@ -21,7 +21,30 @@ import "./models/viagem.model";
 import "./models/associations";
 
 const app = express();
-app.use(cors());
+
+/** -------- CORS explícito (ajuste pontual) -------- */
+const allowedOrigins = [
+  "http://localhost:4200",
+  "https://faculride.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: (origin, cb) => {
+      // permite chamadas sem origin (ex: curl) e as da lista
+      if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+      return cb(new Error("Origin not allowed by CORS"));
+    },
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
+
+// responde preflight para qualquer rota
+app.options("*", cors());
+/** -------------------------------------------------- */
+
 app.use(express.json());
 
 // Configuração do Swagger
