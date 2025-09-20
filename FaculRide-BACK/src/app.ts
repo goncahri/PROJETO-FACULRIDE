@@ -14,11 +14,13 @@ import veiculoRoutes from "./routes/veiculo.routes";
 import avaliacaoRoutes from "./routes/avaliacao.routes";
 import viagemRoutes from "./routes/viagem.routes";
 import logAcessoRoutes from "./routes/logAcesso.routes";
-import publicRoutes from "./routes/public.routes"; // 👈 NOVO
+import publicRoutes from "./routes/public.routes"; 
 
 // Importa models e associações
 import "./models/usuario.model";
 import "./models/viagem.model";
+import "./models/avaliacao.model";   
+import "./models/logAcesso.model";   
 import "./models/associations";
 
 const app = express();
