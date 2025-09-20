@@ -14,6 +14,7 @@ import veiculoRoutes from "./routes/veiculo.routes";
 import avaliacaoRoutes from "./routes/avaliacao.routes";
 import viagemRoutes from "./routes/viagem.routes";
 import logAcessoRoutes from "./routes/logAcesso.routes";
+import publicRoutes from "./routes/public.routes"; // 👈 NOVO
 
 // Importa models e associações
 import "./models/usuario.model";
@@ -23,16 +24,31 @@ import "./models/associations";
 const app = express();
 
 /** -------- CORS explícito (ajuste pontual) -------- */
-const allowedOrigins = [
-  "http://localhost:4200",
-  "https://faculride.vercel.app",
-];
+const isAllowedOrigin = (origin?: string | null) => {
+  if (!origin) return true; // curl, health checks etc.
+
+  try {
+    const url = new URL(origin);
+
+    // localhost (qualquer porta)
+    if (url.hostname === "localhost") return true;
+
+    // qualquer subdomínio *.vercel.app (inclui preview deploys)
+    if (url.hostname.endsWith(".vercel.app")) return true;
+
+    // domínio fixo, se quiser manter
+    if (origin === "https://faculride.vercel.app") return true;
+
+    return false;
+  } catch {
+    return false;
+  }
+};
 
 app.use(
   cors({
     origin: (origin, cb) => {
-      // permite chamadas sem origin (ex: curl) e as da lista
-      if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+      if (isAllowedOrigin(origin)) return cb(null, true);
       return cb(new Error("Origin not allowed by CORS"));
     },
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
@@ -52,6 +68,7 @@ setupSwagger(app);
 
 // Rotas públicas
 app.use("/api/auth", authRoutes);
+app.use("/api/public", publicRoutes); // 👈 NOVO
 
 // Rotas protegidas
 app.use("/api/usuario", usuarioRoutes);
