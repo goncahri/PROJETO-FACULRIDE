@@ -1,33 +1,27 @@
 // src/controllers/public.controller.ts
 import { Request, Response } from "express";
-import { fn, col, where } from "sequelize";
+import { fn, col } from "sequelize";
 import { UsuarioModel } from "../models/usuario.model";
 import { AvaliacaoModel } from "../models/avaliacao.model";
 
 export const publicStats = async (_req: Request, res: Response): Promise<void> => {
   try {
-    // 1) Contagem de usuários (case-insensitive)
+    // 1) Totais por tipo (ENUM: 'motorista' | 'passageiro')
     const [motoristas, passageiros] = await Promise.all([
-      UsuarioModel.count({
-        where: where(fn("LOWER", col("tipoUsuario")), "motorista"),
-      }),
-      UsuarioModel.count({
-        where: where(fn("LOWER", col("tipoUsuario")), "passageiro"),
-      }),
+      UsuarioModel.count({ where: { tipoUsuario: "motorista" } }),
+      UsuarioModel.count({ where: { tipoUsuario: "passageiro" } }),
     ]);
 
-    // 2) Média de avaliações (0..5, arredondada para 1 casa)
-    const avaliacoes = await AvaliacaoModel.findAll({ attributes: ["Estrelas"] });
-    const notas = avaliacoes
-      .map(a => Number(a.get("Estrelas")))
-      .filter(n => !isNaN(n));
-    const mediaAvaliacoes = notas.length
-      ? Math.round((notas.reduce((a, b) => a + b, 0) / notas.length) * 10) / 10
-      : 0;
+    // 2) Média de avaliações (0..5) direto no banco
+    const result = await AvaliacaoModel.findAll({
+      attributes: [[fn("COALESCE", fn("AVG", col("Estrelas")), 0), "media"]],
+      raw: true,
+    });
+    const mediaAvaliacoes = Number((result?.[0] as any)?.media ?? 0);
 
     res.json({
       totais: { motoristas, passageiros },
-      satisfacaoMedia: mediaAvaliacoes,
+      satisfacaoMedia: Math.round(mediaAvaliacoes * 10) / 10, // 1 casa
     });
   } catch (e) {
     console.error("[/api/public/stats] erro:", e);
