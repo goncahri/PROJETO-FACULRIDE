@@ -1,13 +1,25 @@
-import Brevo from "@getbrevo/brevo";
+// src/utils/email.ts
+import * as Brevo from '@getbrevo/brevo';
 
-const apiKey = process.env.BREVO_API_KEY; // crie esta var no Render com a chave da aba "Parâmetros API"
-const mailFrom = process.env.MAIL_FROM || "FaculRide <no-reply@faculride.com>";
+// ---- envs ----
+const API_KEY = process.env.BREVO_API_KEY as string;
 
+// Você pode usar MAIL_FROM_NAME / MAIL_FROM_EMAIL (recomendado)
+const FROM_NAME = process.env.MAIL_FROM_NAME || 'FaculRide';
+const FROM_EMAIL =
+  process.env.MAIL_FROM_EMAIL ||
+  // fallback: tenta extrair de MAIL_FROM tipo "Nome <email@dominio>"
+  (process.env.MAIL_FROM?.match(/<([^>]+)>/)?.[1] ??
+    process.env.MAIL_FROM ??
+    'no-reply@faculride.com');
+
+if (!API_KEY) {
+  console.warn('[email] BREVO_API_KEY ausente. Envio real não funcionará.');
+}
+
+// SDK client
 const brevoClient = new Brevo.TransactionalEmailsApi();
-brevoClient.setApiKey(
-  Brevo.TransactionalEmailsApiApiKeys.apiKey,
-  apiKey as string
-);
+brevoClient.setApiKey(Brevo.TransactionalEmailsApiApiKeys.apiKey, API_KEY);
 
 export async function enviarEmailBoasVindas(destinatario: string, nome: string) {
   const html = `
@@ -22,10 +34,17 @@ export async function enviarEmailBoasVindas(destinatario: string, nome: string) 
     </div>
   `;
 
-  await brevoClient.sendTransacEmail({
-    sender: { email: mailFrom },
-    to: [{ email: destinatario }],
-    subject: "Bem-vindo(a) à FaculRide 🎉",
-    htmlContent: html,
-  });
+  try {
+    const resp = await brevoClient.sendTransacEmail({
+      sender: { name: FROM_NAME, email: FROM_EMAIL },
+      to: [{ email: destinatario, name: nome }],
+      subject: 'Bem-vindo(a) à FaculRide 🎉',
+      htmlContent: html,
+    });
+
+    console.log('[email] enviado via Brevo API:', resp);
+  } catch (err: any) {
+    console.error('[email] Falha ao enviar:', err?.response?.text || err?.message || err);
+    throw err;
+  }
 }
