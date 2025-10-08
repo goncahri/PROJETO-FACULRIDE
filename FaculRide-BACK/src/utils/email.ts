@@ -1,28 +1,13 @@
-import nodemailer from 'nodemailer';
+import Brevo from "@getbrevo/brevo";
 
-const host = process.env.BREVO_HOST || 'smtp-relay.brevo.com';
-const port = Number(process.env.BREVO_PORT || 587);
-const user = process.env.BREVO_USER;
-const pass = process.env.BREVO_PASS;
+const apiKey = process.env.BREVO_API_KEY; // crie esta var no Render com a chave da aba "Parâmetros API"
+const mailFrom = process.env.MAIL_FROM || "FaculRide <no-reply@faculride.com>";
 
-const is465 = port === 465; // 465 = TLS direto
-
-export const brevoTransporter = nodemailer.createTransport({
-  host,
-  port,
-  secure: is465,          // true só se 465
-  auth: { user, pass },
-  requireTLS: !is465,     // força STARTTLS em 587/2525
-  connectionTimeout: 15000,
-  greetingTimeout: 10000,
-  socketTimeout: 20000,
-  logger: true,           // loga no console do Render
-  debug: true,
-  tls: {
-    rejectUnauthorized: true,
-    minVersion: 'TLSv1.2',
-  },
-});
+const brevoClient = new Brevo.TransactionalEmailsApi();
+brevoClient.setApiKey(
+  Brevo.TransactionalEmailsApiApiKeys.apiKey,
+  apiKey as string
+);
 
 export async function enviarEmailBoasVindas(destinatario: string, nome: string) {
   const html = `
@@ -37,10 +22,10 @@ export async function enviarEmailBoasVindas(destinatario: string, nome: string) 
     </div>
   `;
 
-  await brevoTransporter.sendMail({
-    from: process.env.MAIL_FROM || `"FaculRide" <${user}>`, // usa login Brevo se não definir MAIL_FROM
-    to: destinatario,
-    subject: 'Bem-vindo(a) à FaculRide 🎉',
-    html,
+  await brevoClient.sendTransacEmail({
+    sender: { email: mailFrom },
+    to: [{ email: destinatario }],
+    subject: "Bem-vindo(a) à FaculRide 🎉",
+    htmlContent: html,
   });
 }

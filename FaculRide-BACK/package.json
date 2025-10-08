@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@getbrevo/brevo": "^3.0.1",
     "@supabase/supabase-js": "^2.57.4",
     "@vercel/node": "^5.1.16",
     "bcryptjs": "^3.0.2",
