@@ -1,11 +1,26 @@
 import nodemailer from 'nodemailer';
 
+const host = process.env.BREVO_HOST || 'smtp-relay.brevo.com';
+const port = Number(process.env.BREVO_PORT || 587);
+const user = process.env.BREVO_USER;
+const pass = process.env.BREVO_PASS;
+
+const is465 = port === 465; // 465 = TLS direto
+
 export const brevoTransporter = nodemailer.createTransport({
-  host: process.env.BREVO_HOST || 'smtp-relay.brevo.com',
-  port: Number(process.env.BREVO_PORT) || 587,
-  auth: {
-    user: process.env.BREVO_USER,
-    pass: process.env.BREVO_PASS,
+  host,
+  port,
+  secure: is465,          // true só se 465
+  auth: { user, pass },
+  requireTLS: !is465,     // força STARTTLS em 587/2525
+  connectionTimeout: 15000,
+  greetingTimeout: 10000,
+  socketTimeout: 20000,
+  logger: true,           // loga no console do Render
+  debug: true,
+  tls: {
+    rejectUnauthorized: true,
+    minVersion: 'TLSv1.2',
   },
 });
 
@@ -22,8 +37,8 @@ export async function enviarEmailBoasVindas(destinatario: string, nome: string) 
     </div>
   `;
 
-    await brevoTransporter.sendMail({
-    from: '"FaculRide" <98ca7e001@smtp-brevo.com>',  // remetente válido/verificado
+  await brevoTransporter.sendMail({
+    from: process.env.MAIL_FROM || `"FaculRide" <${user}>`, // usa login Brevo se não definir MAIL_FROM
     to: destinatario,
     subject: 'Bem-vindo(a) à FaculRide 🎉',
     html,
