@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { enviarEmailBoasVindas } from "../utils/email";
 dotenv.config();
 
 import { UsuarioModel } from "../models/usuario.model";
@@ -62,6 +63,15 @@ export const cadastrarUsuario = async (usuario: Iusuario): Promise<IRetornoCadas
       idUsuario: novoUsuario.idUsuario,
     });
   }
+  
+    // envia boas-vindas (não bloqueante)
+  (async () => {
+    try {
+      await enviarEmailBoasVindas(novoUsuario.email, novoUsuario.nome);
+    } catch (e) {
+      console.error("[email boas-vindas] falhou:", e);
+    }
+  })();
 
   return { id: novoUsuario.idUsuario };
 };
