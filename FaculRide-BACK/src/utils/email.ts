@@ -1,25 +1,32 @@
-// src/utils/email.ts
-import * as Brevo from '@getbrevo/brevo';
+import nodemailer from 'nodemailer';
 
-// ---- envs ----
-const API_KEY = process.env.BREVO_API_KEY as string;
+const host = process.env.BREVO_HOST || 'smtp-relay.brevo.com';
+const port = Number(process.env.BREVO_PORT || 587);
+const user = process.env.BREVO_USER!;
+const pass = process.env.BREVO_PASS!;
+const FROM_NAME  = process.env.MAIL_FROM_NAME || 'FaculRide';
+const FROM_EMAIL = process.env.MAIL_FROM_EMAIL!; // seu Gmail verificado no Brevo
 
-// Você pode usar MAIL_FROM_NAME / MAIL_FROM_EMAIL (recomendado)
-const FROM_NAME = process.env.MAIL_FROM_NAME || 'FaculRide';
-const FROM_EMAIL =
-  process.env.MAIL_FROM_EMAIL ||
-  // fallback: tenta extrair de MAIL_FROM tipo "Nome <email@dominio>"
-  (process.env.MAIL_FROM?.match(/<([^>]+)>/)?.[1] ??
-    process.env.MAIL_FROM ??
-    'no-reply@faculride.com');
+// 465 = TLS direto; 587/2525 = STARTTLS
+const secure = port === 465;
 
-if (!API_KEY) {
-  console.warn('[email] BREVO_API_KEY ausente. Envio real não funcionará.');
-}
-
-// SDK client
-const brevoClient = new Brevo.TransactionalEmailsApi();
-brevoClient.setApiKey(Brevo.TransactionalEmailsApiApiKeys.apiKey, API_KEY);
+export const smtp = nodemailer.createTransport({
+  host,
+  port,
+  secure,               // false para 587/2525; true só para 465
+  auth: { user, pass },
+  requireTLS: !secure,  // força STARTTLS em 587/2525
+  connectionTimeout: 30000,
+  greetingTimeout: 20000,
+  socketTimeout: 30000,
+  logger: true,
+  debug: true,
+  tls: {
+    minVersion: 'TLSv1.2',
+    // Em caso de proxy/mitm, pode testar com:
+    // rejectUnauthorized: false,
+  }
+});
 
 export async function enviarEmailBoasVindas(destinatario: string, nome: string) {
   const html = `
@@ -34,17 +41,10 @@ export async function enviarEmailBoasVindas(destinatario: string, nome: string) 
     </div>
   `;
 
-  try {
-    const resp = await brevoClient.sendTransacEmail({
-      sender: { name: FROM_NAME, email: FROM_EMAIL },
-      to: [{ email: destinatario, name: nome }],
-      subject: 'Bem-vindo(a) à FaculRide 🎉',
-      htmlContent: html,
-    });
-
-    console.log('[email] enviado via Brevo API:', resp);
-  } catch (err: any) {
-    console.error('[email] Falha ao enviar:', err?.response?.text || err?.message || err);
-    throw err;
-  }
+  await smtp.sendMail({
+    from: `"${FROM_NAME}" <${FROM_EMAIL}>`, // tem que ser o Gmail verificado
+    to: destinatario,
+    subject: 'Bem-vindo(a) à FaculRide 🎉',
+    html
+  });
 }
