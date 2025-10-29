@@ -40,19 +40,51 @@ export const cadastrarUsuario = async (usuario: Iusuario): Promise<IRetornoCadas
 
   const dataNascimento = new Date(usuario.dataNascimento);
   const hoje = new Date();
-
   if (isNaN(dataNascimento.getTime()) || dataNascimento > hoje) {
     throw new Error("Data de nascimento inválida");
   }
 
-  // Normalize email
-  usuario.email = usuario.email.trim().toLowerCase();
+  // RA — 13 dígitos + unicidade
+  const raSomenteDigitos = String(usuario.ra ?? "").replace(/\D/g, "");
+  if (!/^\d{13}$/.test(raSomenteDigitos)) {
+    throw new Error("RA deve conter exatamente 13 dígitos numéricos.");
+  }
+  usuario.ra = raSomenteDigitos;
+
+  const raJaExiste = await UsuarioModel.findOne({ where: { ra: usuario.ra } });
+  if (raJaExiste) {
+    throw new Error("RA já cadastrado para outro usuário.");
+  }
+
+  // CPF — 11 dígitos + unicidade
+  const cpfSomenteDigitos = String(usuario.cpf ?? "").replace(/\D/g, "");
+  if (!/^\d{11}$/.test(cpfSomenteDigitos)) {
+    throw new Error("CPF deve conter exatamente 11 dígitos numéricos.");
+  }
+  usuario.cpf = cpfSomenteDigitos;
+
+  const cpfJaExiste = await UsuarioModel.findOne({ where: { cpf: usuario.cpf } });
+  if (cpfJaExiste) {
+    throw new Error("CPF já cadastrado.");
+  }
+
+  // E-mail — formato + unicidade
+  const emailNormalizado = String(usuario.email ?? "").trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailNormalizado)) {
+    throw new Error("E-mail inválido.");
+  }
+  const emailJaExiste = await UsuarioModel.findOne({ where: { email: emailNormalizado } });
+  if (emailJaExiste) {
+    throw new Error("E-mail já cadastrado.");
+  }
+  usuario.email = emailNormalizado;
 
   // Valida e criptografa senha
   validarSenha(usuario.senha);
   const senhaCriptografada = await bcrypt.hash(usuario.senha, 10);
   usuario.senha = senhaCriptografada;
 
+  // Cria usuário
   const novoUsuario = await UsuarioModel.create(usuario);
 
   // Cria veículo se for motorista
@@ -63,8 +95,8 @@ export const cadastrarUsuario = async (usuario: Iusuario): Promise<IRetornoCadas
       idUsuario: novoUsuario.idUsuario,
     });
   }
-  
-    // envia boas-vindas (não bloqueante)
+
+  // Envia boas-vindas (assíncrono)
   (async () => {
     try {
       await enviarEmailBoasVindas(novoUsuario.email, novoUsuario.nome);
@@ -151,10 +183,8 @@ export const loginUsuario = async (req: Request, res: Response) => {
         genero: usuario.genero,
         dataNascimento: usuario.dataNascimento,
         tipoUsuario: usuario.tipoUsuario,
-        // NOVOS CAMPOS
         fotoUrl: usuario.fotoUrl ?? null,
         fotoPath: usuario.fotoPath ?? null,
-        // -----
         veiculo: veiculo ? veiculo.toJSON() : null
       }
     });
@@ -196,10 +226,8 @@ export const buscarUsuarioPorId = async (req: Request, res: Response) => {
       genero: usuario.genero,
       dataNascimento: usuario.dataNascimento,
       tipoUsuario: usuario.tipoUsuario,
-      // NOVOS CAMPOS
       fotoUrl: usuario.fotoUrl ?? null,
       fotoPath: usuario.fotoPath ?? null,
-      // -----
       veiculo: veiculo ? veiculo.toJSON() : null,
     });
   } catch (error: any) {
@@ -253,7 +281,7 @@ export const deletarUsuario = async (req: Request, res: Response) => {
   }
 };
 
-// ------- NOVO HANDLER (apenas fotoUrl/fotoPath) -------
+// FotoUrl/FotoPath
 export const atualizarFotoUsuario = async (req: Request, res: Response) => {
   try {
     const { fotoUrl, fotoPath } = req.body || {};
@@ -288,7 +316,7 @@ export const atualizarFotoUsuario = async (req: Request, res: Response) => {
   }
 };
 
-// ------- NOVO HANDLER: upload de foto (multipart 'file') -------
+// Upload de foto (multipart 'file')
 export const uploadFotoUsuario = async (req: Request, res: Response) => {
   try {
     const userCtx = (req as any).user;

@@ -16,11 +16,13 @@ module.exports = {
       },
       cpf: {
         type: Sequelize.STRING(14),
-        allowNull: false
+        allowNull: false,
+        unique: true
       },
       ra: {
         type: Sequelize.STRING(20),
-        allowNull: false
+        allowNull: false,
+        unique: true
       },
       fatec: {                      
         type: Sequelize.STRING(50),
@@ -56,7 +58,8 @@ module.exports = {
       },
       email: {
         type: Sequelize.STRING(100),
-        allowNull: false
+        allowNull: false,
+        unique: true
       },
       telefone: {
         type: Sequelize.STRING(20),
