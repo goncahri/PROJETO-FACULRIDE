@@ -17,6 +17,7 @@ import viagemRoutes from "./routes/viagem.routes";
 import logAcessoRoutes from "./routes/logAcesso.routes";
 import publicRoutes from "./routes/public.routes";
 import notificationRoutes from "./routes/notification.routes";
+import pagamentoRoutes from "./routes/pagamento.routes";
 
 // Socket.IO
 import { initSocket } from "./config/socket";
@@ -84,6 +85,9 @@ app.use("/api/veiculo", veiculoRoutes);
 app.use("/api/avaliacao", avaliacaoRoutes);
 app.use("/api/viagem", viagemRoutes);
 app.use("/api/logacesso", logAcessoRoutes);
+
+// Rota de pagamento (apoiadores)
+app.use("/api", pagamentoRoutes);
 
 // Rotas de notificações (JWT é aplicado dentro do router)
 app.use("/api/notifications", notificationRoutes);
