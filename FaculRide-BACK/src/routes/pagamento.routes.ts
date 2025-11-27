@@ -13,7 +13,7 @@ const client = new MercadoPagoConfig({
 // ===================== ROTA: CRIAR PAGAMENTO PIX =================
 router.post(
   "/pagamento",
-  // deixamos tipagem mais solta aqui para evitar erro chato de TS
+  // tipagem solta para evitar erros desnecessários
   async (req: any, res: any) => {
     try {
       // corpo vindo do front (Apoiadores)
@@ -37,7 +37,7 @@ router.post(
           description: desc,
           payment_method_id: "pix",
           payer: {
-            email: "apoiador@faculride.com", // e-mail “genérico” de apoio
+            email: "apoiador@faculride.com", // e-mail genérico para doação
           },
           metadata: {
             idUsuario: idUsuario ?? null,
@@ -57,9 +57,23 @@ router.post(
         valor: valorNumber,
         descricao: desc,
       });
-    } catch (err) {
-      console.error("Erro ao criar pagamento PIX:", err);
-      res.status(500).json({ erro: "Erro ao criar pagamento PIX." });
+    } catch (err: any) {
+      console.error(
+        "⚠️ Erro ao criar pagamento PIX (detalhado):",
+        JSON.stringify(err, null, 2)
+      );
+
+      const detalhe =
+        err?.message ||
+        err?.error?.message ||
+        err?.error?.cause?.[0]?.description ||
+        err?.error ||
+        "Erro desconhecido ao falar com o Mercado Pago.";
+
+      res.status(500).json({
+        erro: "Erro ao criar pagamento PIX.",
+        detalhe,
+      });
     }
   }
 );
