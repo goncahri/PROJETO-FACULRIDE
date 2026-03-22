@@ -7,8 +7,8 @@ import {
   atualizarUsuario,
   deletarUsuario,
   atualizarFotoUsuario,
-  // >>> NOVO IMPORT
-  uploadFotoUsuario
+  uploadFotoUsuario,
+  alterarSenha
 } from "../controllers/usuario.controller";
 import { Iusuario, IusuarioFiltros } from "../interfaces/Iusuario";
 import { AuthorizeMiddleware } from "../middlewares/authorize.middleware";
@@ -41,7 +41,7 @@ router.post("/login", (req, res) => {
 // A partir daqui todas as rotas são protegidas
 router.use(AuthorizeMiddleware as any);
 
-// GET Listar ou filtrar usuários 
+// GET Listar ou filtrar usuários
 router.get("/", async (req, res) => {
   const filtros = req.query as unknown as IusuarioFiltros;
 
@@ -53,17 +53,22 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET Buscar usuário por ID 
+// GET Buscar usuário por ID
 router.get("/:id", (req, res) => {
   buscarUsuarioPorId(req, res);
 });
 
-// PUT Atualizar dados do usuário 
+// PUT Atualizar dados do usuário
 router.put("/:id", (req, res) => {
   atualizarUsuario(req, res);
 });
 
-// DELETE usuário 
+// NOVA ROTA PROTEGIDA — alterar senha do usuário autenticado
+router.put("/alterar-senha", (req, res) => {
+  alterarSenha(req, res);
+});
+
+// DELETE usuário
 router.delete("/:id", (req, res) => {
   deletarUsuario(req, res);
 });
