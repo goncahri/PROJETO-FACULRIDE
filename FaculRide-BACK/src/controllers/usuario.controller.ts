@@ -183,6 +183,7 @@ export const loginUsuario = async (req: Request, res: Response) => {
         genero: usuario.genero,
         dataNascimento: usuario.dataNascimento,
         tipoUsuario: usuario.tipoUsuario,
+        cnh: usuario.cnh ?? null,
         fotoUrl: usuario.fotoUrl ?? null,
         fotoPath: usuario.fotoPath ?? null,
         veiculo: veiculo ? veiculo.toJSON() : null
@@ -226,6 +227,7 @@ export const buscarUsuarioPorId = async (req: Request, res: Response) => {
       genero: usuario.genero,
       dataNascimento: usuario.dataNascimento,
       tipoUsuario: usuario.tipoUsuario,
+      cnh: usuario.cnh ?? null,
       fotoUrl: usuario.fotoUrl ?? null,
       fotoPath: usuario.fotoPath ?? null,
       veiculo: veiculo ? veiculo.toJSON() : null,
@@ -335,7 +337,7 @@ export const uploadFotoUsuario = async (req: Request, res: Response) => {
     if (!allow.includes(mime)) {
       return res.status(400).json({ erro: "Tipo inválido. Use JPEG, PNG ou WEBP." });
     }
-    if (file.size > 5 * 1024 * 1024) { // 5MB
+    if (file.size > 5 * 1024 * 1024) {
       return res.status(400).json({ erro: "Arquivo muito grande (máx. 5MB)." });
     }
 
