@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Op } from "sequelize";
 import { ConversaCaronaModel } from "../models/conversa_carona.model";
 import { MensagemConversaModel } from "../models/mensagem_conversa.model";
 import { UsuarioModel } from "../models/usuario.model";
@@ -24,7 +25,6 @@ export const iniciarConversa = async (req: Request, res: Response) => {
 
     const idMotorista = viagem.idUsuario;
 
-    // Verifica se já existe conversa
     const conversaExistente = await ConversaCaronaModel.findOne({
       where: {
         idViagem,
@@ -34,7 +34,29 @@ export const iniciarConversa = async (req: Request, res: Response) => {
     });
 
     if (conversaExistente) {
-      return res.status(200).json(conversaExistente);
+      const conversaCompleta = await ConversaCaronaModel.findByPk(
+        conversaExistente.idConversa,
+        {
+          include: [
+            {
+              model: ViagemModel,
+              as: "viagem",
+            },
+            {
+              model: UsuarioModel,
+              as: "motorista",
+              attributes: ["nome"],
+            },
+            {
+              model: UsuarioModel,
+              as: "passageiro",
+              attributes: ["nome"],
+            },
+          ],
+        }
+      );
+
+      return res.status(200).json(conversaCompleta || conversaExistente);
     }
 
     const novaConversa = await ConversaCaronaModel.create({
@@ -43,14 +65,35 @@ export const iniciarConversa = async (req: Request, res: Response) => {
       idPassageiro,
     });
 
-    // mensagem inicial automática
     await MensagemConversaModel.create({
       idConversa: novaConversa.idConversa,
       idRemetente: idPassageiro,
       mensagem: "Oi! Tenho interesse na sua carona. Podemos alinhar os detalhes?",
     });
 
-    return res.status(201).json(novaConversa);
+    const conversaCompleta = await ConversaCaronaModel.findByPk(
+      novaConversa.idConversa,
+      {
+        include: [
+          {
+            model: ViagemModel,
+            as: "viagem",
+          },
+          {
+            model: UsuarioModel,
+            as: "motorista",
+            attributes: ["nome"],
+          },
+          {
+            model: UsuarioModel,
+            as: "passageiro",
+            attributes: ["nome"],
+          },
+        ],
+      }
+    );
+
+    return res.status(201).json(conversaCompleta || novaConversa);
   } catch (error: any) {
     return res.status(500).json({ erro: error.message });
   }
@@ -63,10 +106,12 @@ export const listarMinhasConversas = async (req: Request, res: Response) => {
     const idUsuario = user?.id ?? user?.idUsuario;
 
     const conversas = await ConversaCaronaModel.findAll({
-      where: [
-        { idMotorista: idUsuario },
-        { idPassageiro: idUsuario },
-      ],
+      where: {
+        [Op.or]: [
+          { idMotorista: idUsuario },
+          { idPassageiro: idUsuario },
+        ],
+      },
       include: [
         {
           model: ViagemModel,
@@ -161,7 +206,6 @@ export const aceitarCarona = async (req: Request, res: Response) => {
       conversa.aceitePassageiro = true;
     }
 
-    // Atualiza status
     if (conversa.aceiteMotorista && conversa.aceitePassageiro) {
       conversa.status = "aceita";
     } else {
