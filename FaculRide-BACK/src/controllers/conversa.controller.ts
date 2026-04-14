@@ -25,6 +25,7 @@ export const iniciarConversa = async (req: Request, res: Response) => {
 
     const idMotorista = viagem.idUsuario;
 
+    // 1) tenta achar uma conversa já existente
     const conversaExistente = await ConversaCaronaModel.findOne({
       where: {
         idViagem,
@@ -45,12 +46,12 @@ export const iniciarConversa = async (req: Request, res: Response) => {
             {
               model: UsuarioModel,
               as: "motorista",
-              attributes: ["nome"],
+              attributes: { exclude: ["senha"] },
             },
             {
               model: UsuarioModel,
               as: "passageiro",
-              attributes: ["nome"],
+              attributes: { exclude: ["senha"] },
             },
           ],
         }
@@ -59,18 +60,21 @@ export const iniciarConversa = async (req: Request, res: Response) => {
       return res.status(200).json(conversaCompleta || conversaExistente);
     }
 
+    // 2) cria a conversa
     const novaConversa = await ConversaCaronaModel.create({
       idViagem,
       idMotorista,
       idPassageiro,
     });
 
+    // 3) mensagem automática inicial
     await MensagemConversaModel.create({
       idConversa: novaConversa.idConversa,
       idRemetente: idPassageiro,
       mensagem: "Oi! Tenho interesse na sua carona. Podemos alinhar os detalhes?",
     });
 
+    // 4) busca novamente completa
     const conversaCompleta = await ConversaCaronaModel.findByPk(
       novaConversa.idConversa,
       {
@@ -82,12 +86,12 @@ export const iniciarConversa = async (req: Request, res: Response) => {
           {
             model: UsuarioModel,
             as: "motorista",
-            attributes: ["nome"],
+            attributes: { exclude: ["senha"] },
           },
           {
             model: UsuarioModel,
             as: "passageiro",
-            attributes: ["nome"],
+            attributes: { exclude: ["senha"] },
           },
         ],
       }
@@ -107,10 +111,7 @@ export const listarMinhasConversas = async (req: Request, res: Response) => {
 
     const conversas = await ConversaCaronaModel.findAll({
       where: {
-        [Op.or]: [
-          { idMotorista: idUsuario },
-          { idPassageiro: idUsuario },
-        ],
+        [Op.or]: [{ idMotorista: idUsuario }, { idPassageiro: idUsuario }],
       },
       include: [
         {
@@ -120,12 +121,12 @@ export const listarMinhasConversas = async (req: Request, res: Response) => {
         {
           model: UsuarioModel,
           as: "motorista",
-          attributes: ["nome"],
+          attributes: { exclude: ["senha"] },
         },
         {
           model: UsuarioModel,
           as: "passageiro",
-          attributes: ["nome"],
+          attributes: { exclude: ["senha"] },
         },
       ],
       order: [["createdAt", "DESC"]],
@@ -148,7 +149,7 @@ export const listarMensagens = async (req: Request, res: Response) => {
         {
           model: UsuarioModel,
           as: "remetente",
-          attributes: ["nome"],
+          attributes: { exclude: ["senha"] },
         },
       ],
       order: [["createdAt", "ASC"]],
@@ -168,14 +169,24 @@ export const enviarMensagem = async (req: Request, res: Response) => {
 
     const { idConversa, mensagem } = req.body;
 
+    if (!idConversa) {
+      return res.status(400).json({ erro: "Conversa não informada" });
+    }
+
     if (!mensagem || mensagem.trim().length < 1) {
       return res.status(400).json({ erro: "Mensagem vazia" });
+    }
+
+    const conversa = await ConversaCaronaModel.findByPk(idConversa);
+
+    if (!conversa) {
+      return res.status(404).json({ erro: "Conversa não encontrada" });
     }
 
     const novaMensagem = await MensagemConversaModel.create({
       idConversa,
       idRemetente,
-      mensagem,
+      mensagem: mensagem.trim(),
     });
 
     return res.status(201).json(novaMensagem);
