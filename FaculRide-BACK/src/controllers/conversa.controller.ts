@@ -23,6 +23,11 @@ export const iniciarConversa = async (req: Request, res: Response) => {
       return res.status(404).json({ erro: "Viagem não encontrada" });
     }
 
+    // Não permite iniciar conversa em viagem cancelada
+    if (viagem.cancelada) {
+      return res.status(400).json({ erro: "Não é possível iniciar conversa em uma viagem cancelada" });
+    }
+
     const idMotorista = viagem.idUsuario;
 
     // 1) tenta achar uma conversa já existente
@@ -60,12 +65,54 @@ export const iniciarConversa = async (req: Request, res: Response) => {
       return res.status(200).json(conversaCompleta || conversaExistente);
     }
 
-    // 2) cria a conversa
-    const novaConversa = await ConversaCaronaModel.create({
-      idViagem,
-      idMotorista,
-      idPassageiro,
-    });
+    let novaConversa;
+
+    try {
+      // 2) cria a conversa
+      novaConversa = await ConversaCaronaModel.create({
+        idViagem,
+        idMotorista,
+        idPassageiro,
+      });
+    } catch (error: any) {
+      // Se duas requisições chegarem juntas, a constraint UNIQUE do banco pode barrar uma delas.
+      // Nesse caso, buscamos a conversa já criada e devolvemos normalmente.
+      const conversaRecuperada = await ConversaCaronaModel.findOne({
+        where: {
+          idViagem,
+          idMotorista,
+          idPassageiro,
+        },
+      });
+
+      if (conversaRecuperada) {
+        const conversaCompleta = await ConversaCaronaModel.findByPk(
+          conversaRecuperada.idConversa,
+          {
+            include: [
+              {
+                model: ViagemModel,
+                as: "viagem",
+              },
+              {
+                model: UsuarioModel,
+                as: "motorista",
+                attributes: { exclude: ["senha"] },
+              },
+              {
+                model: UsuarioModel,
+                as: "passageiro",
+                attributes: { exclude: ["senha"] },
+              },
+            ],
+          }
+        );
+
+        return res.status(200).json(conversaCompleta || conversaRecuperada);
+      }
+
+      throw error;
+    }
 
     // 3) mensagem automática inicial
     await MensagemConversaModel.create({
@@ -177,10 +224,22 @@ export const enviarMensagem = async (req: Request, res: Response) => {
       return res.status(400).json({ erro: "Mensagem vazia" });
     }
 
-    const conversa = await ConversaCaronaModel.findByPk(idConversa);
+    const conversa = await ConversaCaronaModel.findByPk(idConversa, {
+      include: [
+        {
+          model: ViagemModel,
+          as: "viagem",
+        },
+      ],
+    });
 
     if (!conversa) {
       return res.status(404).json({ erro: "Conversa não encontrada" });
+    }
+
+    // Não permite mensagem em viagem cancelada
+    if ((conversa as any).viagem?.cancelada) {
+      return res.status(400).json({ erro: "Não é possível enviar mensagem em uma viagem cancelada" });
     }
 
     const novaMensagem = await MensagemConversaModel.create({
@@ -209,6 +268,17 @@ export const aceitarCarona = async (req: Request, res: Response) => {
       return res.status(404).json({ erro: "Conversa não encontrada" });
     }
 
+    const viagem = await ViagemModel.findByPk(conversa.idViagem);
+
+    if (!viagem) {
+      return res.status(404).json({ erro: "Viagem não encontrada" });
+    }
+
+    // Não permite aceitar viagem cancelada
+    if (viagem.cancelada) {
+      return res.status(400).json({ erro: "Não é possível aceitar uma viagem cancelada" });
+    }
+
     if (conversa.idMotorista === idUsuario) {
       conversa.aceiteMotorista = true;
     }
@@ -219,6 +289,23 @@ export const aceitarCarona = async (req: Request, res: Response) => {
 
     if (conversa.aceiteMotorista && conversa.aceitePassageiro) {
       conversa.status = "aceita";
+
+      // Cancelar outras conversas da mesma viagem
+      await ConversaCaronaModel.update(
+        {
+          status: "recusada",
+          aceiteMotorista: false,
+          aceitePassageiro: false,
+        },
+        {
+          where: {
+            idViagem: conversa.idViagem,
+            idConversa: {
+              [Op.ne]: conversa.idConversa, // todas menos a atual
+            },
+          },
+        }
+      );
     } else {
       conversa.status = "aguardando_confirmacao";
     }
@@ -240,6 +327,17 @@ export const recusarCarona = async (req: Request, res: Response) => {
 
     if (!conversa) {
       return res.status(404).json({ erro: "Conversa não encontrada" });
+    }
+
+    const viagem = await ViagemModel.findByPk(conversa.idViagem);
+
+    if (!viagem) {
+      return res.status(404).json({ erro: "Viagem não encontrada" });
+    }
+
+    // Não permite recusar viagem cancelada
+    if (viagem.cancelada) {
+      return res.status(400).json({ erro: "A viagem já foi cancelada" });
     }
 
     conversa.status = "recusada";

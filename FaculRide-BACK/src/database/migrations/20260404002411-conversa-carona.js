@@ -73,6 +73,13 @@ module.exports = {
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     });
+
+    // NOVO: impede conversa duplicada para a mesma viagem/motorista/passageiro
+    await queryInterface.addConstraint('conversa_carona', {
+      fields: ['idViagem', 'idMotorista', 'idPassageiro'],
+      type: 'unique',
+      name: 'unique_conversa_viagem_motorista_passageiro'
+    });
   },
 
   async down(queryInterface, Sequelize) {
